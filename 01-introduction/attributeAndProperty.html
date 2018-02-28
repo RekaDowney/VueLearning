@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attribute 和 Property 的区别</title>
+</head>
+<body>
+
+<input id="name" type="text" value="Your name" placeholder="输入你的名字">
+
+<script type="text/javascript">
+
+    function showAttributeAndProperty() {
+        let dom = document.getElementById('name');
+        console.warn('Attribute');
+        console.log(dom.getAttribute('value'));
+        console.log(dom.defaultValue);
+
+        console.warn('Property');
+        console.log(dom.value);
+    }
+
+</script>
+</body>
+</html>

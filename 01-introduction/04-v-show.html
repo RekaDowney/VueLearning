@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>v-show指令</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+
+<div id="vueShow">
+
+    <!-- v-show 指令只是简单地将绑定的标签的 display 设置成是否可展示状态，而不是删除标签 -->
+    <p v-show="trueDisplay">{{message}}</p>
+
+    <!-- false、undefined、null、0、'' 这五种情况都不展示该 p 标签，即将 p 标签的 display 设置成 none -->
+    <p v-show="falseDisplay">{{message}}</p>
+    <p v-show="undefinedDisplay">{{message}}</p>
+    <p v-show="nullDisplay">{{message}}</p>
+    <p v-show="zeroDisplay">{{message}}</p>
+    <p v-show="emptyDisplay">{{message}}</p>
+</div>
+
+<script type="text/javascript">
+    let vue = new Vue({
+        el: '#vueShow',
+        data: {
+            trueDisplay: true,
+            falseDisplay: false,
+            undefinedDisplay: undefined,
+            nullDisplay: null,
+            zeroDisplay: 0,
+            emptyDisplay: '',
+            message: 'Hello VueJS'
+        }
+    })
+</script>
+</body>
+</html>

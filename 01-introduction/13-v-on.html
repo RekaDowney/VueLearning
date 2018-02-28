@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns: xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>v-on指令</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+    <style type="text/css">
+        * {
+            padding-right: 5px;
+        }
+
+        .bgGreen {
+            background-color: green;
+        }
+
+        .bgYellow {
+            background-color: yellow;
+        }
+
+        .box {
+            height: 80px;
+            width: 50%;
+        }
+
+        .smallBox {
+            height: 40px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="vueOn">
+    <!-- greet 不携带 () 时会自动将 event 参数传入到方法中 -->
+    <button type="button" v-on:click="greet">打招呼</button>
+    <!-- greet 携带 () 后不会将 event 参数传入到方法中 -->
+    <button type="button" v-on:click="greet()">打招呼</button>
+    <!-- 调用方法时可以使用 $event 表示当前触发的 DOM 事件对象 -->
+    <button type="button" v-on:click="greet('Reka', $event)">打招呼</button>
+    <!-- v-on:event 可以缩写成 @event -->
+    <button type="button" @dblclick="greet('Reka', $event)">打招呼</button>
+
+    <hr>
+
+    <div :class="{bgYellow: truthy, box: truthy}" @click="greet('div')">
+        <p :class="{bgGreen: truthy, smallBox: truthy}" @click.stop="greet('p')">.stop事件冒泡</p>
+    </div>
+
+    <hr>
+    <div :class="{bgYellow: truthy, box: truthy}" @click="log('点击了div标签')">
+        <!-- 阻止默认事件，但事件可以冒泡 -->
+        <a :class="{smallBox: truthy, bgGreen: truthy}" href="https://google.com" @click.prevent="log('点击了a标签')">阻止a标签的跳转事件</a>
+        <br>
+        <!-- 阻止默认事件和事件冒泡 -->
+        <a :class="{smallBox: truthy, bgGreen: truthy}" href="https://google.com" @click.stop.prevent="log('点击了a标签')">阻止a标签的跳转事件</a>
+    </div>
+
+    <hr>
+    <!-- 只有当点击 div 的时候才会触发 div 的点击事件，div 内部的元素事件冒泡不会触发当前 div 的点击事件 -->
+    <div :class="{bgYellow: truthy, box: truthy}" @click.self="log('点击了div标签')">
+        <!-- 阻止默认事件，但事件可以冒泡 -->
+        <a :class="{smallBox: truthy, bgGreen: truthy}" href="https://google.com" @click.prevent="log('点击了a标签')">阻止a标签的跳转事件</a>
+    </div>
+
+    <hr>
+    <div>
+        <button @click.left="log('鼠标左键点击')">@click.left</button>
+        <button @dblclick.left="log('鼠标左键双击')">@dblclick.left</button>
+        <!-- 不支持鼠标右键双击事件 -->
+        <!--<button @dblclick.right.prevent="log('鼠标左键双击，阻止浏览器默认的右击事件')">@dblclick.right.prevent</button>-->
+        <button @click.right="log('鼠标右键点击')">@click.right</button>
+        <button @click.right.prevent="log('鼠标右键点击，阻止浏览器默认的右击事件')">@click.right.prevent</button>
+        <button @click.middle="log('鼠标中键点击')">@click.middle</button>
+        <!-- 不支持鼠标中键双击事件 -->
+        <!--<button @dblclick.middle="log('鼠标中键双击')">@dblclick.middle</button>-->
+    </div>
+
+    <hr>
+    <div>
+        <label>
+            <!-- 按住某个键会导致 keydown 事件连续触发 -->
+            <!-- tab 键不支持 keyup 事件 -->
+            <input type="text"
+                   @keydown.enter="log('按下了enter键')"
+                   @keydown.up="log('按下了向上键')"
+                   @keydown.down="log('按下了向下键')"
+                   @keydown.left="log('按下了向左键')"
+                   @keydown.right="log('按下了向右键')"
+                   @keydown.tab="log('按下了Tab键')"
+                   @keyup.enter="log('松开了enter键')"
+                   @keyup.delete="log('松开了delete键或者Backspace键')"
+                   @keyup.esc="log('松开了Esc键')"
+                   @keyup.space="log('松开了空格键')"
+            >
+        </label>
+
+        <label>
+            自定义键位别名
+            <input type="text"
+                   @keydown.ctrl="log('按下了ctrl键')"
+                   @keydown.shift="log('按下了shift键')"
+                   @keydown.alt="log('按下了alt键')"
+            >
+        </label>
+
+        <label>
+            组合按键
+            <input type="text"
+                   @keydown.ctrl.alt="log('按下了ctrl键和alt键')"
+            >
+        </label>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    let data = {
+        message: 'Hello VueJS',
+        truthy: true,
+        falsy: false,
+    };
+    let methods = {
+        greet: function (message, event) {
+            console.log('你好！', message);
+            event && console.log('事件', event);
+        },
+        log: function (message, event) {
+            console.log(new Date(), message);
+            event && console.log('事件', event);
+        }
+    };
+    let vue = new Vue({
+        el: '#vueOn',
+        data: data,
+        methods: methods,
+    });
+
+    Vue.config.keyCodes = {
+        // shift 键的码为 16
+        shift: 16,
+        // ctrl 键的码为 17
+        ctrl: 17,
+        // alt 键的码为 18
+        alt: 18
+    }
+
+</script>
+</body>
+</html>

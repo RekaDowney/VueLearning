@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VueJs 插值</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+
+<div id="vue">
+    <h1> {{message}} </h1>
+    <p> {{stringValue}} </p>
+    <p> {{booleanValue}} </p>
+    <p> {{integerValue}} </p>
+    <p> {{floatValue}} </p>
+    <!-- [ 1, 2, 3 ] -->
+    <p> {{arrayValue}} </p>
+    <!-- { "username": "Reka", "age": 24 } -->
+    <p> {{jsonValue}} </p>
+    <!-- function () { return 'func'; } -->
+    <p> {{functionValue}} </p>
+</div>
+
+<script type="text/javascript">
+    let data = {
+        message: 'Hello VueJs',
+        stringValue: 'string',
+        booleanValue: true,
+        integerValue: 123,
+        floatValue: 345.67,
+        arrayValue: [1, 2, 3],
+        jsonValue: {username: 'Reka', age: 24},
+        functionValue: function () {
+            return 'func';
+        }
+    };
+    let vue = new Vue({
+        // el属性用来指定 VueJS 的渲染视图
+        el: '#vue',
+        // data 作为 Vue 响应式系统的数据对象，当该对象的属性发生变化时，Vue 将会及时响应到对应的视图上
+        data: data
+    });
+
+    // Vue 提供以 $ 开头的属性和方法来增强 VueJS 的使用
+    // vueInstance.$data 获取 Vue 实例的数据对象
+    Assert.requireTrue(vue._data === vue.$data && vue.$data === data);
+
+    // vueInstance.$el 获取 Vue 实例的渲染视图
+    Assert.requireTrue($("#vue")[0] === vue.$el && vue.$el === document.getElementById('vue'));
+
+    // vueInstance 绑定了数据对象后，该数据对象的所有属性都可以通过 vueInstance.${prop} 方法访问
+    Assert.requireTrue(vue.$data.message === vue.message && vue.message === data.message && data.message === 'Hello VueJs');
+
+</script>
+</body>
+</html>

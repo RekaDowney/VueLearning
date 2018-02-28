@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>v-if指令</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+
+<div id="vueIf">
+
+    <!-- v-if 指令当数据结果为 undefined、null、false、0、'' 时，会忽略该指令所绑定标签的渲染，即页面上完全看不到该标签 -->
+    <p v-if="undefinedVal">{{message}}</p>
+    <p v-if="falseVal">{{message}}</p>
+    <p v-if="nullVal">{{message}}</p>
+    <p v-if="zeroVal">{{message}}</p>
+    <p v-if="emptyVal">{{message}}</p>
+
+    <p v-if="trueVal">{{message}}</p>
+</div>
+
+<script type="text/javascript">
+    let vue = new Vue({
+        el: '#vueIf',
+        data: {
+            trueVal: true,
+            falseVal: false,
+            undefinedVal: undefined,
+            nullVal: null,
+            zeroVal: 0,
+            emptyVal: '',
+            message: 'Hello VueJS'
+        }
+    })
+</script>
+</body>
+</html>

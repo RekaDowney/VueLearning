@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue-for指令</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+
+<div id="vueFor">
+
+    <p>
+        ||　<span v-for="(num, index) in 10">{{index}} --> {{num}}　||　</span>
+    </p>
+    <p>
+        ||　<span v-for="(num, index) in numberVal">{{index}} --> {{num}}　||　</span>
+    </p>
+    <p>
+        ||　<span v-for="(char, index) in 'ABCDEFG'">{{index}} --> {{char}}　||　</span>
+    </p>
+    <p>
+        ||　<span v-for="(char, index) in stringVal">{{index}} --> {{char}}　||　</span>
+    </p>
+
+    <hr/>
+
+    <p>
+        ||<span v-for="fruit in fruits">　{{fruit}}　||</span>
+    </p>
+    <!-- VueJS 2.* 不再支持通过内置的 $index 获取数组循环时的索引 -->
+    <!-- VueJS 2.* 通过 (item, index) in array 方式来声明 index 索引变量 -->
+    <p>
+        ||<span v-for="(fruit, index) in fruits">　{{index}} --> {{fruit}}　||</span>
+    </p>
+    <p>
+        <!-- 可以使用 of 来替代 in -->
+        ||<span v-for="(fruit, index) of fruits">　{{index}} --> {{fruit}}　||</span>
+    </p>
+
+    <hr/>
+
+    <!-- 对于 JSON 对象， Vue 提供(value) 或者 (value, key) 或者 (value, key, index) 方式遍历 -->
+    <p>
+        ||<span v-for="(value, key, index) in user">　{{index}} --> {{key}} --> {{value}}　||</span>
+    </p>
+    <!-- Vue 1.* 的 $key 和 $index 隐藏变量在 Vue 2.* 中已被移除 -->
+    <!--<p v-for="value in user">{{value}} &#45;&#45; {{$key}} &#45;&#45; {{$index}}</p>-->
+    <p>
+        <!-- 可以使用 of 来替代 in -->
+        ||<span v-for="(value, key, index) of user">　{{index}} --> {{key}} --> {{value}}　||</span>
+    </p>
+
+    <hr/>
+
+    <!-- 当 v-for 和 v-if 同时绑定在同一个标签时，v-for 的优先级高于 v-if，因此先执行循环，每个迭代再执行条件判断 -->
+    <p>
+        <!-- 展示索引为偶数的数字，即展示 1 ~ 10 的奇数 -->
+        ||<span v-for="(num, index) in 10" v-if="index % 2 == 0">　{{num}}　||</span>
+    </p>
+    <p>
+        <!-- 展示 1 ~ 10 的偶数 -->
+        ||<span v-for="(num, index) in 10" v-if="num % 2 == 0">　{{num}}　||</span>
+    </p>
+
+</div>
+
+<script type="text/javascript">
+    let data = {
+        numberVal: 10,
+        stringVal: 'ABCDEFG',
+        fruits: ['apple', 'banana', 'strawberry', 'pineapple'],
+
+        user: {
+            username: 'Reka',
+            age: 24,
+            gender: 'Male'
+        },
+    };
+    let vue = new Vue({
+        el: '#vueFor',
+        data: data
+    });
+</script>
+</body>
+</html>

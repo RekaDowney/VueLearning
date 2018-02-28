@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>v-bind指令</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+
+    <style type="text/css">
+        .fgRed {
+            color: red;
+        }
+
+        .fgBlue {
+            color: blue;
+        }
+
+        .bgYellow {
+            background-color: yellow;
+        }
+
+        .bgGreen {
+            background-color: green;
+        }
+
+        span {
+            padding-right: 20px;
+        }
+    </style>
+
+</head>
+<body>
+
+<div id="vueBind">
+    <!-- 图片的 src 属性绑定时若使用 {{mustache}} 将会变成请求 {{mustache}}，此时将会抛出 404 导致图片加载不出来 -->
+    <!-- 另外从 Vue 2.* 开始，不再支持在属性中使用 {{mustache}} 方式来绑定数据对象，即必须通过 v-bind 来绑定数据到属性上 -->
+    <!--<img src="{{imageSrc}}" alt="{{imageAlt}}">-->
+
+    <!-- v-bind:attribute 可以缩写成 :attribute，强烈建议使用缩写形式 -->
+    <!-- 使用 v-bind 指令后，绑定的数据对象变量不可以添加 {{}}，否则 Vue 编译报错 -->
+    <img v-bind:src="imageSrc" :alt="imageAlt">
+    <!-- 此时 :alt 使用了字面常量，因此此时建议直接使用 alt 属性即可 -->
+    <img :src="imageSrc" :alt="'Vue图标'">
+    <hr>
+
+    <p>
+        <span :class="'fgBlue'">直接使用字面量的fgBlue</span>
+        <span :class="cssClassFgRed">通过绑定数据对象到fgRed样式类</span>
+        <span :class="[cssClassFgRed]">以数组格式绑定数据对象</span>
+        <span :class="[cssClassFgRed, cssClassBgYellow]">以数组格式绑定数据对象</span>
+        <span :class="cssClassArray">绑定数组数据对象</span>
+        <span class="fgRed" :class="[cssClassBgYellow]">数据绑定与原生 class 共存</span>
+        <br/>
+
+        <span :class="{fgRed: truthy, fgBlue: falsy, bgYellow: truthy}">以JSON格式绑定数据对象</span>
+        <span :class="[cssClassFgRed, {bgYellow: truthy, bgGreen: falsy}]">以数组嵌套JSON格式绑定数据对象</span>
+        <span :class="cssClassJson">绑定JSON数据对象</span>
+    </p>
+
+    <p>
+        <span :style="'color: red;'">使用color: red;字面量</span>
+        <span :style="cssStyleFgRed">绑定cssStyle对象</span>
+        <span :style="[cssStyleFgRed, cssStyleBgYellow]">绑定cssStyle对象数组</span>
+    </p>
+
+
+</div>
+
+
+<script type="text/javascript">
+
+    // <a href="https://developer.mozilla.org/en-US/docs/Glossary/Truthy">Truthy</a>
+    // falsy 指 undefined、null、false、0、"" 这五个值
+    // truthy 指排除 falsy 之后的所有值
+
+    let data = {
+        message: 'Hello VueJS',
+        imageSrc: '../resources/image/vue.jpg',
+        imageAlt: 'VueJS图标',
+        truthy: true,
+        falsy: false,
+        cssClassFgRed: 'fgRed',
+        cssClassFgBlue: 'fgBlue',
+        cssClassBgYellow: 'bgYellow',
+        cssClassBgGreen: 'bgGreen',
+        // 此时 cssClassArray 中不可以使用 this.cssClassFgRed 和 this.cssClassBgYellow 替换
+        cssClassArray: ['fgRed', 'bgYellow'],
+        // 此时 cssClassArray 中不可以使用 this.truthy 替换
+        cssClassJson: {'fgBlue': true},
+        cssStyleFgRed: {color: 'red'},
+        cssStyleBgYellow: {backgroundColor: 'yellow'}
+    };
+    let vue = new Vue({
+        el: '#vueBind',
+        data: data,
+    });
+</script>
+</body>
+</html>

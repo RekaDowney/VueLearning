@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>v-text指令</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+
+<div id="vueText">
+    <!-- 将 p 标签的内容与 message 数据绑定在一起 -->
+    <p v-text="message"></p>
+    <br/>
+    <p>{{message}}</p>
+</div>
+
+<script type="text/javascript">
+    let vue = new Vue({
+        el: '#vueText',
+        data: {
+            message: 'Hello VueJS'
+        }
+    })
+</script>
+</body>
+</html>

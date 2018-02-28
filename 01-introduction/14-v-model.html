@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>v-model指令</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+    <style type="text/css">
+        * {
+            margin-right: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="vueModel">
+    <!-- 特别注意，v-model 会忽略所有表单元素的 value、checked、selected 特性的初始值而总是将 Vue 实例的数据作为数据来源。 -->
+    <!--你应该通过 JavaScript 在组件的 data 选项中声明初始值。-->
+
+    <p>普通文本输入框数据绑定</p>
+    <label>
+        <input type="text" v-model="message">
+    </label>
+    <p>{{message}}</p>
+    <hr>
+
+    <p>文本域数据绑定</p>
+    <label>
+        <textarea v-model="multiLine" style="width: 100%; height: 80px;"></textarea>
+    </label>
+    <p style="white-space: pre-line">{{multiLine}}</p>
+    <hr>
+
+    <p>单选框数据绑定</p>
+    <label>男
+        <!-- 下面的 checked 不起作用，必须在 data 数据域中通过 genderRadioSelected: '男' 来实现默认勾选 -->
+        <!-- 由于使用 v-model 进行数据绑定，因此不需要使用 name 字段来区分单选框组别 -->
+        <input type="radio" value="男" v-model="genderRadioSelected">
+    </label>
+    <label>女
+        <input type="radio" value="女" v-model="genderRadioSelected">
+    </label>
+    <p>性别：{{genderRadioSelected}}</p>
+
+    <hr>
+
+    <p>复选框数据绑定</p>
+    <label> <input type="checkbox" value="Apple" v-model="fruitsLiked">苹果 </label>
+    <label> <input type="checkbox" value="Pineapple" v-model="fruitsLiked">菠萝 </label>
+    <label> <input type="checkbox" value="Strawberry" v-model="fruitsLiked">草莓 </label>
+    <label> <input type="checkbox" value="Banana" v-model="fruitsLiked">香蕉 </label>
+    <label> <input type="checkbox" value="Peach" v-model="fruitsLiked">桃子 </label>
+    <p>喜欢的水果：{{fruitsLiked}}</p>
+    <hr>
+
+    <p>下拉单选框数据绑定</p>
+    <label>请选择语言：
+        <select v-model="languageSelected">
+            <option disabled value="">请选择</option>
+            <option value="Java">Java</option>
+            <option value="Python">Python</option>
+            <option value="C++">C++</option>
+            <option value="JavaScript">JavaScript</option>
+        </select>
+    </label>
+    <p>选中语言：{{languageSelected}}</p>
+    <hr>
+
+    <p>下拉多选框数据绑定</p>
+    <label>请选择语言（多选）：
+        <select multiple v-model="languagesSelected">
+            <option disabled value="">请选择</option>
+            <option value="Java">Java</option>
+            <option value="Python">Python</option>
+            <option value="C++">C++</option>
+            <option value="JavaScript">JavaScript</option>
+            <option value="R">R</option>
+            <option value="Go">Go</option>
+        </select>
+    </label>
+    <p>选中语言：{{languagesSelected}}</p>
+    <hr>
+
+    <p>使用 v-for 指令渲染下拉多选框</p>
+    <label>请选择语言（多选）：
+        <select multiple v-model="vforLanguagesSelected">
+            <option v-for="(option, index) in languages" :value="option.value"
+                    :disabled="option.disabled">
+                {{option.text}}
+            </option>
+        </select>
+    </label>
+    <p>选中语言：{{vforLanguagesSelected}}</p>
+    <hr>
+
+    <p>.number 修饰符将输入转成 number 对象</p>
+    <label>
+        <input type="text" v-model.number="numberModifier">
+    </label>
+    <p>{{numberModifier}}</p>
+    <hr>
+
+    <p>.trim 修饰符将输入去掉前后空格</p>
+    <label>
+        <input type="text" v-model.trim="trimModifier">
+    </label>
+    <p>{{trimModifier}}</p>
+    <hr>
+
+    <p>.lazy 修饰符只有当输入框发生 blur 事件才处理数据</p>
+    <label>
+        <input type="text" v-model.lazy="lazyModifier">
+    </label>
+    <p>{{lazyModifier}}</p>
+    <hr>
+
+    <p>.trim.lazy 修饰符只有当输入框发生 blur 事件才处理数据，并去掉数据的前后空格</p>
+    <label>
+        <input type="text" v-model.trim.lazy="trimLazyModifier">
+    </label>
+    <p>{{trimLazyModifier}}</p>
+    <hr>
+
+</div>
+
+<script type="text/javascript">
+    let languages = [{
+        text: '请选择',
+        value: '',
+        disabled: 'disabled'
+    }, {
+        text: 'Java',
+        value: 'Java'
+    }, {
+        text: 'Python',
+        value: 'Python'
+    }, {
+        text: 'C++',
+        value: 'C++'
+    }, {
+        text: 'JavaScript',
+        value: 'JavaScript'
+    }, {
+        text: 'R',
+        value: 'R'
+    }, {
+        text: 'Go',
+        value: 'Go'
+    }];
+    let data = {
+        message: 'Hello VueJS',
+        multiLine: '',
+        // 指定默认为 男
+        genderRadioSelected: '男',
+        // 不指定默认勾选
+        // fruitsLiked: [],
+        // 默认勾选苹果、菠萝、桃子
+        fruitsLiked: ['Apple', 'Pineapple', 'Peach'],
+        // 通过一个 disabled 的选项，避免 IOS 系统因为初始值匹配不到导致下拉框第一个选项不可用
+        // languageSelected: 'NotExists',
+        languageSelected: '',
+        languagesSelected: ['Java', 'JavaScript'],
+        vforLanguagesSelected: [],
+        languages: languages,
+        numberModifier: 0,
+        trimModifier: '',
+        lazyModifier: '',
+        trimLazyModifier: '',
+    };
+
+    let methods = {
+        greet: function (who, event) {
+            console.log('你好！', who);
+            event && console.log(event);
+        },
+    };
+
+    let vue = new Vue({
+        el: '#vueModel',
+        data: data,
+        methods: methods,
+
+    });
+</script>
+</body>
+</html>

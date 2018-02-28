@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>v-else-if指令</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+
+<div id="vueIf">
+    <!-- v-else-if 指令必须紧跟在 v-if 或者 v-else-if 指令后面 -->
+    <p v-if="stringVal === 'A'">Value is A</p>
+    <p v-else-if="stringVal === 'B'">Value is B</p>
+
+
+    <p v-if="numberVal === 8">Value is 8</p>
+    <p v-else-if="numberVal === 9">Value is 9</p>
+    <p v-else-if="numberVal === 10">Value is 10</p>
+</div>
+
+<script type="text/javascript">
+    let vue = new Vue({
+        el: '#vueIf',
+        data: {
+            trueVal: true,
+            falseVal: false,
+            undefinedVal: undefined,
+            nullVal: null,
+            zeroVal: 0,
+            emptyVal: '',
+            stringVal: 'A',
+            numberVal: 9,
+            message: 'Hello VueJS'
+        }
+    })
+</script>
+</body>
+</html>

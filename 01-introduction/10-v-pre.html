@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>v-pre指令</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+
+<div id="vuePre">
+    <p>不使用 v-pre 指令</p>
+    <!-- 可以打印 -->
+    <p>{{}}</p>
+
+    <!-- 无法打印，结果直接变成了 <p></p> -->
+    <p>{{ }}</p>
+
+    <!-- 可以打印 -->
+    <p>{{</p>
+
+    <!-- 可以打印 -->
+    <p>}}</p>
+
+    <!-- 不可以打印 -->
+    <!-- Property or method "hhh" is not defined on the instance but referenced during render. -->
+    <!--<p>{{hhh}}</p>-->
+    <p>使用 v-pre 指令</p>
+    <div v-pre>{{stringVal}}
+        <p>{{</p>
+        <p>}}</p>
+        <p>{{ }}</p>
+    </div>
+</div>
+
+<script type="text/javascript">
+    let vue = new Vue({
+        el: '#vuePre',
+        data: {
+            trueVal: true,
+            falseVal: false,
+            undefinedVal: undefined,
+            nullVal: null,
+            zeroVal: 0,
+            emptyVal: '',
+            stringVal: 'source',
+            numberVal: 9,
+            message: 'Hello VueJS'
+        }
+    });
+
+
+</script>
+</body>
+</html>

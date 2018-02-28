@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>v-html指令</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+
+<div id="vueText">
+    <!-- 将 p 标签的内容与 message 数据绑定在一起，并且将 message 的内容作为 html 进行渲染而不是原值渲染 -->
+    <p v-html="message"></p>
+    <br/>
+
+    <!-- v-text 不会将内容以 html 方式渲染 -->
+    <p v-text="message"></p>
+    <!-- mustache 插值不会将内容以 html 方式渲染 -->
+    <p>{{message}}</p>
+</div>
+
+<script type="text/javascript">
+    let vue = new Vue({
+        el: '#vueText',
+        data: {
+            message: '<span style="color: red;">Hello VueJS</span>'
+        }
+    })
+</script>
+</body>
+</html>

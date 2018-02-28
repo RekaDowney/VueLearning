@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>v-cloak指令</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+
+    <style type="text/css">
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="vueCloak">
+    <p>不使用 v-cloak 指令</p>
+    <p>{{stringVal}}</p>
+
+
+    <p>结合[v-cloak] { display: none; } 样式使用 v-cloak 指令</p>
+    <p v-cloak>{{stringVal}}</p>
+</div>
+
+<script type="text/javascript">
+    setTimeout(() => {
+        // 1秒后创建 Vue 实例
+        let vue = new Vue({
+            el: '#vueCloak',
+            data: {
+                trueVal: true,
+                falseVal: false,
+                undefinedVal: undefined,
+                nullVal: null,
+                zeroVal: 0,
+                emptyVal: '',
+                stringVal: 'source',
+                numberVal: 9,
+                message: 'Hello VueJS'
+            }
+        });
+
+        /*
+                // 创建 Vue 实例后1秒再修改数据
+                setTimeout(() => {
+                    vue.stringVal = 'one second elapsed';
+                    vue.numberVal = 1111;
+                }, 1000);
+        */
+
+    }, 1000);
+
+
+</script>
+</body>
+</html>
