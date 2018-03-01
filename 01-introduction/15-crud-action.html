@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>增删改查实践</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+    <link type="text/css" rel="stylesheet" href="../resources/css/table/table.css"/>
+    <style type="text/css">
+        .text-center {
+            text-align: center;
+        }
+
+        .danger {
+            color: red;
+        }
+
+        .center {
+            margin: 0 auto;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="vueAction">
+    <div class="center text-center">
+        <button type="button" @click="appendUser">Append</button>
+    </div>
+    <table>
+        <thead>
+        <Tr>
+            <th>ID</th>
+            <th>username</th>
+            <th>age</th>
+            <th>gender</th>
+            <th>Operation</th>
+        </Tr>
+        </thead>
+        <tbody>
+        <template v-if="users.length !== 0">
+            <tr>
+                <td colspan="5">
+                    <button type="button" class="text-center danger" @click="truncate">Delete All</button>
+                </td>
+            </tr>
+            <tr v-for="(user, index) in users">
+                <td>{{user.id}}</td>
+                <td>{{user.username}}</td>
+                <td>{{user.age}}</td>
+                <td>{{user.gender}}</td>
+                <td>
+                    <button type="button" @click="modifyUser(user)">Modify</button>
+                    <!-- VueJS 约束 -->
+                    <!-- - avoid using JavaScript unary operator as property name: "delete(user)" in expression @click="delete(user)"-->
+                    <!--<button type="button" @click="delete(user)" class="danger">Delete</button>-->
+                    <button type="button" @click="deleteUser(user)" class="danger">Delete</button>
+                </td>
+            </tr>
+        </template>
+        <template v-else>
+            <tr>
+                <td class="text-center danger" colspan="5">Empty users!!</td>
+            </tr>
+        </template>
+        </tbody>
+    </table>
+
+    <div class="save" style="margin: 0 auto; text-align: center;" v-show="showForSave">
+        <form>
+            <input type="text" v-model.trim.lazy="user.username" placeholder="Username"><br/>
+            <input type="text" v-model.number.lazy="user.age" placeholder="Age"><br/>
+            <label>Male
+                <input type="radio" value="male" v-model="user.gender">
+            </label>
+            <label>Female
+                <input type="radio" value="female" v-model="user.gender">
+            </label>
+            <br/>
+            <button type="button" @click="cancelSave">Cancel</button>
+            <button type="button" @click="saveUser">Save</button>
+        </form>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    let counter = 1;
+
+    class User {
+        constructor(id = null, username, age, gender = 'male') {
+            this.id = id;
+            this.username = username;
+            this.age = age;
+            this.gender = gender;
+        }
+
+        toString() {
+            return `{"id": ${this.id}, "username": "${this.username}", "age": ${this.age}, "gender": ${this.gender}`;
+        }
+    }
+
+    let data = {
+        message: 'Hello VueJS',
+        // users: [new User(1, 'Reka', 24), new User(2, 'Rachel', 22, 'female')],
+        users: [],
+        username: '',
+        age: '',
+        gender: 'male',
+        user: new User(),
+        showForSave: false,
+    };
+    let methods = {
+            appendUser: function () {
+                this.user = new User();
+                this.showForSave = true;
+                console.log('append');
+            },
+            deleteUser: function (user) {
+                // layer 弹出层中 this 不是指向 Vue 实例，必须通过 vue 引用完成对象操作
+                layer.confirm(`Delete ${user.username}?`, {
+                    btn: ['Yes', 'No'],
+                    yes: function (index) {
+                        console.log('delete', JSON.stringify(user));
+                        let idx = vue.users.findIndex((user, idx, arr) => user.id === vue.user.id);
+                        vue.users.splice(idx, 1);
+                        layer.close(index);
+                    },
+                    btn2: function (index) {
+                        layer.close(index);
+                    }
+                });
+            },
+            modifyUser: function (user) {
+                this.user = user;
+                this.showForSave = true;
+                console.log('modify', JSON.stringify(user));
+            },
+            truncate: function () {
+                console.warn('truncate');
+                layer.confirm('Delete All?', {
+                    btn: ['Yes', 'No'],
+                    yes: function (index) {
+                        vue.users.splice(0, vue.users.length);
+                        counter = 1;
+                        layer.close(index);
+                    },
+                    btn2: function (index) {
+                        layer.close(index);
+                    }
+                });
+            },
+            cancelSave: function () {
+                this.showForSave = false;
+            },
+            saveUser: function () {
+                if (this.user.id === null) { // 添加操作
+                    this.user.id = counter;
+                    counter++;
+                    this.users.push(this.user);
+                } else { // 修改操作
+                    let idx = this.users.findIndex((user, idx, arr) => user.id === this.user.id);
+                    this.users[idx] = this.user;
+                }
+                this.showForSave = false;
+            }
+        }
+    ;
+    let vue = new Vue({
+        el: '#vueAction',
+        data: data,
+        methods: methods,
+    });
+
+</script>
+</body>
+</html>

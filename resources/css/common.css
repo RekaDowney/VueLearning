@@ -1,0 +1,167 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* 设置 html 和 body 的宽高都为 100% 就可以让页面占满整个浏览器的屏幕 */
+html, body {
+    font-family: "Lucida Sans Typewriter", monospace;
+    font-size: 14px;
+    width: 100%;
+    height: 100%;
+}
+
+/*
+.container {
+    height: 100%;
+    padding: 40px 0 0;
+    box-sizing: border-box;
+}
+
+.btnContainer {
+    height: 40px;
+    margin: -40px 0 0;
+}
+
+.officeContainer {
+    height: 100%;
+}
+*/
+
+/* 上面被注释掉的 CSS 实现与下面相同的效果 */
+
+.container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.btnContainer {
+    height: 40px;
+    /*background: #BBE8F2;*/
+}
+
+.officeContainer {
+    /*background: #D9C666;*/
+    width: 100%;
+    position: absolute;
+    top: 40px;
+    left: 0;
+    bottom: 0;
+}
+
+/* 标准容器 -- 页首 */
+.headerContainer {
+    width: 100%;
+    height: 40px;
+    top: 0;
+    left: 0;
+    position: absolute;
+    /*z-index: 100;*/
+}
+
+/* 标准容器 -- 页首 */
+
+/* 标准容器 -- 主体 */
+.mainContainer {
+    width: 100%;
+    position: absolute;
+    overflow: auto;
+    left: 0;
+    top: 40px;
+    bottom: 40px;
+    /*z-index: 90;*/
+}
+
+/* 标准容器 -- 主体 */
+
+/* 标准容器 -- 页尾 */
+.tailContainer {
+    width: 100%;
+    height: 40px;
+    left: 0;
+    bottom: 0;
+    position: absolute;
+    /*z-index: 100;*/
+}
+
+/* 标准容器 -- 页尾 */
+
+.header {
+    width: 100%;
+    height: 40px;
+    top: 0;
+    left: 0;
+    position: absolute;
+}
+
+.tail {
+    width: 100%;
+    height: 40px;
+    left: 0;
+    bottom: 0;
+    position: absolute;
+}
+
+.main {
+    width: 100%;
+    top: 40px;
+    left: 0;
+    bottom: 40px;
+    overflow: auto;
+    position: absolute;
+}
+
+.main-left {
+    width: 30%;
+    height: 100%;
+    position: absolute;
+}
+
+.main-right {
+    width: 70%;
+    height: 100%;
+    margin-left: 30%;
+}
+
+.main-right-body {
+    width: 100%;
+    height: 80%;
+}
+
+.main-right-tail {
+    width: 100%;
+    height: 20%;
+    /*top: 80%;*/
+    /*bottom: 0;*/
+}
+
+.msg-danger {
+    color: #fff;
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
+
+.msg-warning {
+    color: #fff;
+    background-color: #ec971f;
+    border-color: #d58512;
+}
+
+.msg-info {
+    color: #fff;
+    background-color: #5bc0de;
+    border-color: #46b8da;
+}
+
+.msg-success {
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+
+.msg-primary {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
