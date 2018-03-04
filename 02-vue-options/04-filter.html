@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue 过滤器</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+<div id="vueFilter">
+    <p>原始 message 数据</p>
+    <p>{{message}}</p>
+    <p v-pre>{{message | capitalize}}过滤器处理</p>
+    <p>{{message | capitalize | concat('arg2', arg3Val)}} 多过滤器处理</p>
+    <p>过滤器也是JS函数，传入的参数在形参列表中从第二个参数开始映射，第一个参数使用过滤器前的数据结果</p>
+    <p v-pre>{{message | capitalize | concat('arg2', arg3Val)}}</p>
+    <p>{{message | capitalize | concat(' ', 'arg2', arg3Val)}}</p>
+</div>
+<script type="text/javascript">
+
+    // Vue 2.* 已禁用所有 Vue 1.* 内置的过滤器
+
+    // 定义全局过滤器 capitalize，必须在 Vue 实例创建之前声明
+    // 如果 Vue 实例创建之后再声明将无法使用全局过滤器，[Vue warn]: Failed to resolve filter: capitalize
+    Vue.filter('capitalize', function (value) {
+        if (!value) return '';
+        value = value.toString();
+        return value.charAt(0).toUpperCase() + value.slice(1);
+    });
+
+    let vue = new Vue({
+        el: '#vueFilter',
+        data: {
+            message: 'hello VueJS',
+            arg3Val: 'HaHaHa'
+        },
+        methods: {},
+        // 将过滤器绑定到当前的 Vue 实例中（局部过滤器）
+        filters: {
+            /*
+                        capitalize: function (value) {
+                            if (!value) return '';
+                            value = value.toString();
+                            return value.charAt(0).toUpperCase() + value.slice(1);
+                        }
+            */
+            concat: function (value, separator, arg2, ...args) {
+                let arr = [];
+                arr.push(value);
+                arr.push(arg2);
+                args && arr.splice(arr.length, 0, ...args);
+                return arr.join(separator);
+            }
+        }
+    });
+
+</script>
+</body>
+</html>

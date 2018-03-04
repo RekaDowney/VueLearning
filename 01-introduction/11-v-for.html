@@ -65,6 +65,13 @@
         ||<span v-for="(num, index) in 10" v-if="num % 2 == 0">　{{num}}　||</span>
     </p>
 
+    <hr/>
+
+    <!-- Vue 2.* 强烈建议在 v-for 循环中使用 :key 为每一项成员数据提供一个唯一的 key 属性 -->
+    <!-- Vue 2.* v-for 数组循环默认采用了数组索引作为成员身份跟踪策略，因此不会像 Vue 1.* 一样不允许重复元素出现在数组渲染中 -->
+    <p>||<span v-for="(num, index) in duplicateNumArray">　{{num}}　||</span></p>
+    <!-- 更稳妥的方式是绑定 key 属性，类似于 Vue 1.* 的 track-by 属性 -->
+    <p>||<span v-for="(num, index) in duplicateNumArray" :key="index">　{{num}}　||</span></p>
 </div>
 
 <script type="text/javascript">
@@ -72,7 +79,7 @@
         numberVal: 10,
         stringVal: 'ABCDEFG',
         fruits: ['apple', 'banana', 'strawberry', 'pineapple'],
-
+        duplicateNumArray: [1, 2, 3, 4, 5],
         user: {
             username: 'Reka',
             age: 24,
@@ -83,6 +90,9 @@
         el: '#vueFor',
         data: data
     });
+
+    setTimeout(() => vue.duplicateNumArray.push(3), 1000);
+    setTimeout(() => vue.duplicateNumArray.push(1), 2000);
 </script>
 </body>
 </html>
