@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue 生命周期</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+<div id="vueLifeCycle">
+    <p>2秒后将 message 更新成 HaHaHa，并将 showMessage 更新为 false</p>
+    <p>4秒后执行 vue.$destroy() 方法销毁 Vue 实例</p>
+    <p>{{message}}</p>
+    <p v-if="showMessage">{{message}}</p>
+    <div id="lifeCycleLog">
+    </div>
+</div>
+<script type="text/javascript">
+    let vue = new Vue({
+        el: '#vueLifeCycle',
+        data: {
+            message: 'Hello VueJS!',
+            showMessage: true,
+        },
+        beforeCreate: function () {
+            $('#lifeCycleLog').append($('<p/>').text(new Date() + ' --> before create Vue instance'));
+        },
+        created: function () {
+            $('#lifeCycleLog').append($('<p/>').text(new Date() + ' --> Vue instance created'));
+        },
+        // beforeMount 始终没有触发【后面使用了组件后再试试】
+        beforeMount: function () {
+            $('#lifeCycleLog').append($('<p/>').text(new Date() + ' --> prepare to create Vue $el'));
+        },
+        mounted: function () {
+            $('#lifeCycleLog').append($('<p/>').text(new Date() + ' --> Vue $el created'));
+        },
+        beforeUpdate: function () {
+            $('#lifeCycleLog').append($('<p/>').text(new Date() + ' --> prepare to render Virtual DOM'));
+        },
+        updated: function () {
+            $('#lifeCycleLog').append($('<p/>').text(new Date() + ' --> Virtual DOM updated'));
+        },
+        beforeDestroy: function () {
+            $('#lifeCycleLog').append($('<p/>').text(new Date() + ' --> before destroy Vue instance'));
+        },
+        destroyed: function () {
+            $('#lifeCycleLog').append($('<p/>').text(new Date() + ' --> Vue instance destroyed'));
+        }
+    });
+
+    setTimeout(() => {
+        vue.message = 'HaHaHa';
+        vue.showMessage = false;
+    }, 2000);
+
+    setTimeout(() => vue.$destroy(), 4000);
+</script>
+</body>
+</html>

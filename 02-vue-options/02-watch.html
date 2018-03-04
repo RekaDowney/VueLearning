@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue 侦听属性</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+<div id="vueWatch">
+    <p>1秒后修改 message 为 ABC</p>
+    {{message}}
+    <p id="watchInfo" v-show="showWatchInfo"></p>
+</div>
+<script type="text/javascript">
+    let vue = new Vue({
+        el: '#vueWatch',
+        data: {
+            message: 'Hello VueJS!',
+            showWatchInfo: false,
+        },
+        methods: {},
+        watch: {
+            // 侦听 message 数据对象的变化
+            // 如果真的需要用到侦听操作，建议采用 vueInstance.$watch 方法
+            message: function (newVal, oldVal) {
+                this.showWatchInfo = true;
+                $('#watchInfo').text('watch log：message change from "' + oldVal + '" to "' + newVal + '"');
+            }
+        }
+    });
+
+    setTimeout(() => vue.message = 'ABC', 1000);
+</script>
+</body>
+</html>

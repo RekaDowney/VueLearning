@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue 计算属性</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+<div id="vueComputed">
+    <p>一秒后执行 vue.reverseMessage = '321cba' 语句</p>
+    <p>{{message}}</p>
+    <p>{{reverseMessage}}</p>
+
+    <p>computed 计算属性基于相关依赖进行缓存，如果相关依赖不属于 Vue 托管，那么该计算属性将一致保持第一次调用产生的结果</p>
+    <button type="button" @click="showNow">当前时间戳</button>
+    <div id="nowList">
+    </div>
+</div>
+<script type="text/javascript">
+    let vue = new Vue({
+        el: '#vueComputed',
+        data: {
+            message: 'Hello VueJS!',
+        },
+        /*
+                computed: {
+                    reverseMessage: function () {
+                        return this.message.split('').reverse().join('');
+                    }
+                }
+        */
+        methods: {
+            showNow: function () {
+                $('#nowList').append($('<p>').text(this.now));
+            }
+        },
+        // computed 计算属性与 methods 方法的区别在于前者作为 Vue实例 的属性存在，存在缓存性，后者作为 Vue实例 的方法存在，没有缓存
+        // 特别注意：computed 配置项都是属性，不是函数，因此调用方式是 this.${computedAttribute} 而不是 this.${computedAttribute}()
+        computed: {
+            reverseMessage: {
+                // get 方法在获取 reverseMessage 计算属性时调用
+                get: function () {
+                    return this.message.split('').reverse().join('');
+                },
+                // set 方法在为 reverseMessage 计算属性赋值时调用
+                set: function (value) {
+                    this.message = value.split('').reverse().join('');
+                }
+            },
+            now: function () {
+                return Date.now();
+            }
+        }
+    });
+
+    setTimeout(() => vue.reverseMessage = '321cba', 1000);
+</script>
+</body>
+</html>
