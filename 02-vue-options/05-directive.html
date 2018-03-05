@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue 自定义指令</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+<div id="vueDirective">
+    <p v-color="'blue'">Blue Font</p>
+    <p v-color:background-color="'pink'">{{colorMessage}}</p>
+    <p>一秒后将 message 更新为 ABC，两秒后将 unbindIt 更新为 true</p>
+    <template v-if="!unbindIt">
+        <p v-red>{{message}}</p>
+    </template>
+</div>
+<script type="text/javascript">
+    /*
+        // 定义全局指令 v-red，特别注意：全局指令必须在 Vue 实例化之前创建
+        // 否则报错：[Vue warn]: Failed to resolve directive: red
+        Vue.directive('red', {
+            // 当 v-red 指令绑定的元素被插入到 DOM 时触发
+            inserted: function (element) {
+                $(element).css('color', 'red');
+            }
+        });
+    */
+
+    let vue = new Vue({
+        el: '#vueDirective',
+        data: {
+            message: 'Hello VueJS',
+            unbindIt: false,
+            colorMessage: 'Hello Rachel',
+        },
+        methods: {},
+        directives: {
+            // 局部指令 red
+            red: {
+                // 只调用一次，指令第一次绑定到元素时调用。在这里可以进行一次性的初始化设置。
+                bind: function (element, binding, vnode, oldVnode) {
+                    Assert.requireTrue(this === window);
+                },
+                // 被绑定元素插入父节点时调用 (仅保证父节点存在，但不一定已被插入文档中)。
+                inserted: function (element, binding, vnode, oldVnode) {
+                    Assert.requireTrue(this === window);
+                    console.log(new Date(), 'inserted');
+                    $(element).css('color', 'red');
+                },
+                // 所在组件的 VNode 更新时调用，但是可能发生在其子 VNode 更新之前。
+                // 指令的值可能发生了改变，也可能没有。
+                update(element, binding, vnode, oldVnode) {
+                    Assert.requireTrue(this === window);
+                    console.log(new Date(), 'update');
+
+                },
+                // 指令所在组件的 VNode 及其子 VNode 全部更新后调用。
+                componentUpdated(element, binding, vnode, oldVnode) {
+                    Assert.requireTrue(this === window);
+                    console.log(new Date(), 'componentUpdated');
+
+                },
+                // 只调用一次，指令与元素解绑时调用。
+                // 指令所绑定元素从 Vue 中脱离之后触发，一般是通过 v-if 控制，也可以直接 $(element).remove() 触发
+                unbind(element, binding, vnode, oldVnode) {
+                    console.log(new Date(), 'unbind');
+
+                }
+            },
+            // color 指令只处理 bind 和 update 这两个钩子函数时可以直接简写成如下格式
+            // 特别注意：此时指令绑定的某一个元素发生变化时，其他元素也同样会触发 update 钩子
+            color: function (element, binding) {
+                console.log(binding);
+                console.log(new Date(), 'bind or update');
+                // 指令的参数
+                let arg = binding.arg;
+                // 指令的表达式
+                // let expression = binding.expression;
+                // 指令表达式的 JS 执行结果，表达式如果是 JS 语句片段的时候非常有用，比如表达式 1 + 1 的执行结果为 2
+                let value = binding.value;
+                if (arg && arg === 'background-color') {
+                    $(element).css('background-color', value);
+                } else {
+                    $(element).css('color', value);
+                }
+            },
+            /*
+                        color: {
+                            bind(element, binding, vnode, oldVnode) {
+                                // 指令的参数
+                                let arg = binding.arg;
+                                // 指令的表达式
+                                // let expression = binding.expression;
+                                // 指令表达式的 JS 执行结果，表达式如果是 JS 语句片段的时候非常有用，比如表达式 1 + 1 的执行结果为 2
+                                let value = binding.value;
+                                if (arg && arg === 'background-color') {
+                                    $(element).css('background-color', value);
+                                } else {
+                                    $(element).css('color', value);
+                                }
+                            }
+                        }
+            */
+        }
+    });
+
+    setTimeout(() => vue.message = 'ABC', 1000);
+    setTimeout(() => vue.colorMessage = 'Hello Reka', 1000);
+    setTimeout(() => vue.unbindIt = true, 2000);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue 组件数据对象</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+
+<div id="vueGlobalComponent">
+    <local-component></local-component>
+    <div>
+        <error-data-component></error-data-component>
+        <error-data-component></error-data-component>
+        <error-data-component></error-data-component>
+    </div>
+    <div>
+        <success-data-component></success-data-component>
+        <success-data-component></success-data-component>
+        <success-data-component></success-data-component>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    let componentData = {
+        counter: 1
+    };
+
+    let vue = new Vue({
+        el: '#vueGlobalComponent',
+        data: {
+            message: 'Hello VueJS',
+        },
+        methods: {},
+        components: {
+            'local-component': {
+                // 组件中的模板只能够使用当前组件声明的 data，无法获取 Vue 实例的 data
+                // 注意这里的 message 是组件的 data.message，不是 Vue.$data.message
+                template: '<div>{{message}}</div>',
+                // 同时 data 必须是一个函数
+                data() {
+                    return {
+                        message: 'Component Data',
+                    };
+                },
+            },
+            'error-data-component': {
+                template: '<button @click.stop.prevent="counter += 1">{{counter}}</button>',
+                // 错误。所有组件实例化都会将 componentData 作为组件的 data 数据对象
+                data() {
+                    return componentData;
+                }
+            },
+            'success-data-component': {
+                template: '<button @click.stop.prevent="counter += 1">{{counter}}</button>',
+                data() {
+                    return {
+                        counter: 1
+                    };
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

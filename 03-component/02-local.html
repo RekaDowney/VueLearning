@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue 局部组件</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+
+<div id="vueGlobalComponent">
+    <local-component></local-component>
+</div>
+
+<script type="text/javascript">
+    let vue = new Vue({
+        el: '#vueGlobalComponent',
+        data: {
+            message: 'Hello VueJS',
+        },
+        methods: {},
+        components: {
+            // 定义局部组件，依赖于当前 Vue 实例存在
+            'local-component': {
+                template: '<div>A Local Component!!</div>'
+            }
+        }
+    });
+</script>
+</body>
+</html>
