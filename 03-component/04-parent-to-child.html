@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!--suppress HtmlUnknownTag -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue 父组件与子组件通信 props</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+<div id="vueParentChild">
+    <!-- 传递字符串到 child 组件 props 中的 passToChildMessage 变量 -->
+    <child pass-to-child-message="pure string"></child>
+
+    <!-- 传递 vue 实例的 message 变量到 child 组件 props 中的 passToChildMessage 变量 -->
+    <child :pass-to-child-message="message"></child>
+
+    <!-- 传递 vue 实例的 message 变量到 child2 的 props 中的 message 变量 -->
+    <child2 :message="message"></child2>
+
+    <hr/>
+    <!-- 这里 v-bind 无法缩写成 : -->
+    <!-- 传递 vue 实例的 person 变量到 child2 的 props 中的 username 和 age 变量 -->
+    <pass-object v-bind="person"></pass-object>
+    <!-- 上面这个标签等价于下面的标签。可以简单地看成 v-bind 会将对象解构成下面的方式 -->
+    <pass-object :username="person.username" :age="person.age"></pass-object>
+
+</div>
+<script type="text/javascript">
+
+    let vue = new Vue({
+        el: '#vueParentChild',
+        data: {
+            message: 'Hello VueJS',
+            person: {
+                username: 'Reka',
+                age: 24
+            },
+        },
+        methods: {},
+        components: {
+            'child': {
+                template: '<p>{{passToChildMessage}}</p>',
+                props: ['passToChildMessage'],
+            },
+            'child2': {
+                props: ['message'],
+                template: '<p>{{message}}</p>',
+            },
+            'pass-object': {
+                props: ['username', "age"],
+                template: '<p>{{username}} --> {{age}}</p>',
+            }
+        }
+    });
+</script>
+</body>
+</html>

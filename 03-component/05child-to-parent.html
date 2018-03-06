@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!--suppress HtmlUnknownTag -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue 子组件与父组件通信 on 和 $emit</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+<div id="vueChildParent">
+    {{counterTotal}}
+    <br/>
+    <!-- 当子组件触发 increment 事件的时候调用 incrementTotal 方法 -->
+    <child @increment="incrementTotal"></child>
+    <child @increment="incrementTotal"></child>
+
+    <hr/>
+
+    <!-- 监听 child 组件的原生 click 事件 -->
+    <child @click.native="clickChild"></child>
+</div>
+<script type="text/javascript">
+
+    let vue = new Vue({
+        el: '#vueChildParent',
+        data: {
+            counterTotal: 0,
+        },
+        methods: {
+            incrementTotal: function () {
+                this.counterTotal += 1;
+            },
+            clickChild: function () {
+                console.log('click child');
+            }
+        },
+        components: {
+            'child': {
+                data() {
+                    return {
+                        counter: 0,
+                    };
+                },
+                template: '<button type="button" @click="incrementCounter">{{counter}}</button>',
+                methods: {
+                    incrementCounter: function () {
+                        this.counter += 1;
+                        this.$emit('increment');
+                    }
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>
