@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!--suppress HtmlUnknownTag -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>slot</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+<div id="vueSlot">
+    <p>父级</p>
+    <div>
+        <p>{{message}}</p>
+    </div>
+    <hr/>
+
+    <p>子级</p>
+    <!-- 子组件无法处理该 message 字段 -->
+    <!-- 这是因为父组件模板是在父级作用域中编译的，子组件模板是在子级作用域中编译的 -->
+    <!-- 因此 message 字段在子组件中并不存在，无法参与编译 -->
+    <component-child>{{message}}</component-child>
+</div>
+<script type="text/javascript">
+
+    Vue.component('component-child', {
+        template: '<div id="child"></div>'
+    });
+
+    let vue = new Vue({
+        el: '#vueSlot',
+        data: {
+            message: 'message from parent component'
+        }
+    });
+</script>
+</body>
+</html>

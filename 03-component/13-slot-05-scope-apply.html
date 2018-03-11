@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!--suppress HtmlUnknownTag -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>作用域插槽应用</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+<div id="vueScopeSlot">
+
+    <my-list :users="users">
+        <template slot="userInfo" slot-scope="props">
+            <!-- 这里每一项的数据都是从子组件模板中获取的 -->
+            <li>{{props.username}}</li>
+        </template>
+    </my-list>
+</div>
+<template>
+</template>
+<script type="text/javascript">
+    // noinspection HtmlUnknownAttribute
+    Vue.component('my-list', {
+        props: {
+            'users': {
+                type: Array,
+                default() {
+                    return [];
+                }
+            }
+        },
+        template: '<ul>' +
+        '<slot name="userInfo" :username="user.name" v-for="(user, index) in users"></slot>' +
+        '</ul>'
+    });
+
+    let vue = new Vue({
+        el: '#vueScopeSlot',
+        data: {
+            users: [
+                {id: 1, name: 'Reka', age: 24},
+                {id: 2, name: 'Rachel', age: 22},
+                {id: 3, name: 'Lily', age: 23},
+            ]
+        }
+    })
+</script>
+</body>
+</html>

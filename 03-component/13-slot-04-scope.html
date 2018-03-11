@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--suppress HtmlUnknownTag -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>作用域插槽</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+<div id="vueScopeSlot">
+    <component-child>
+        <!-- Vue 2.5 将 scope 属性改成了 slot-scope -->
+        <template slot="propsSlot" slot-scope="props">
+            <p>{{messageFromParent}}</p>
+            <!-- 通过 slot-scope 指定从 子组件的 props 中获取数据 -->
+            <p>{{props.messageFromChild}}</p>
+        </template>
+    </component-child>
+</div>
+<template>
+</template>
+<script type="text/javascript">
+    // noinspection HtmlUnknownAttribute
+    Vue.component('component-child', {
+        // slot 这里通过绑定 message-from-child 变量为 messageFromChild 数据对象
+        template: '<div class="container">\n' +
+        '        <slot name="propsSlot" :message-from-child="messageFromChild"></slot>\n' +
+        '    </div>',
+        data() {
+            return {
+                messageFromChild: '这是子组件的内容'
+            }
+        }
+    });
+
+    let vue = new Vue({
+        el: '#vueScopeSlot',
+        data: {
+            messageFromParent: '这是父组件的内容'
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--suppress HtmlUnknownTag -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>父链</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+
+<div id="vueParentChain">
+    <p>父级</p>
+    <p>{{counter}}</p>
+
+    <hr>
+
+    <p>子级</p>
+    <component-child></component-child>
+</div>
+
+<script type="text/javascript">
+    Vue.component('component-child', {
+        template: '<div><button type="button" @click="incrementParentCounter">$parent父链方法对 counter 字段自增1</button><br/>' +
+        '<button type="button" @click="decrementParentCounter">$parent父链方法对 counter 字段自减1</button></div>',
+        methods: {
+            incrementParentCounter() {
+                // 通过 this.$parent 获取并操作父组件的所有数据
+                this.$parent.counter++;
+            },
+            decrementParentCounter() {
+                this.$parent.counter--;
+            }
+        }
+    });
+
+    let vue = new Vue({
+        el: '#vueParentChain',
+        data: {
+            counter: 1
+        },
+    })
+</script>
+</body>
+</html>

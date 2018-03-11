@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!--suppress HtmlUnknownTag -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>named slot</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+<div id="vueSlot">
+    <component-child>
+        <!-- 映射到名称为 header 的具名 slot -->
+        <h2 slot="header">{{headerInfo}}</h2>
+
+        <!-- 映射到默认 slot -->
+        <div>
+            <p style="font-weight: bold;">正文</p>
+            <p>第一段落</p>
+            <p>第二段落</p>
+        </div>
+
+        <!-- 映射到名称为 footer 的具名 slot -->
+        <div slot="footer">{{footerInfo}}</div>
+    </component-child>
+
+
+</div>
+<script type="text/javascript">
+
+    Vue.component('component-child', {
+        template: ' <div class="container">\
+                        <div class="header">\
+                            <slot name="header">\
+                                <h2>默认头部</h2>\
+                            </slot>\
+                        </div>\
+                        <div class="main">\
+                            <slot>默认主体</slot>\
+                        </div>\
+                        <div class="footer">\
+                            <slot name="footer">\
+                                <div>默认底部</div>\
+                            </slot>\
+                        </div>\
+                    </div>'
+    });
+
+    let vue = new Vue({
+        el: '#vueSlot',
+        data: {
+            message: 'message from parent component',
+            showChildComponent: true,
+            headerInfo: '这里是头部',
+            footerInfo: '这里是底部',
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!--suppress HtmlUnknownTag -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>X-Templates</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+<div id="vueXTemplates">
+    <component-child>
+
+    </component-child>
+
+    <!-- type 建议使用官方声明的 text/x-template，而不是 text/x-handlebars-template -->
+    <script type="text/x-template" id="x-template-component">
+        <div>这是子组件的内容</div>
+    </script>
+    <!--
+        <script type="text/x-handlebars-template" id="x-template-component">
+            <div>这是子组件的内容</div>
+        </script>
+    -->
+</div>
+
+<script type="text/javascript">
+    // 这里组件的模板会自动定位到 id 为 x-template-component 的 type 为 text/x-template 的脚本中
+    Vue.component('component-child', {
+        template: '#x-template-component'
+    });
+
+    let vue = new Vue({
+        el: '#vueXTemplates',
+    })
+</script>
+</body>
+</html>

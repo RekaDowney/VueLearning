@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--suppress HtmlUnknownTag -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>v-model 实现父子通信与子父通信</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+
+<div id="app">
+    <p>{{counter}}</p>
+    <component-model v-model="counter"></component-model>
+    <button type="button" @click="decrement">-</button>
+</div>
+
+<script type="text/javascript">
+    Vue.component('component-model', {
+        // props 都是 immutable 内存地址不可变的
+        props: ['counter'],
+        template: '<input type="text" :value="counter" @input="updateCounter"/>',
+        methods: {
+            updateCounter(event) {
+                // 无法使用 this.counter 触发通信
+                // this.$emit('input', this.counter);
+                this.$emit('input', event.target.value);
+            }
+        }
+    });
+
+    let vue = new Vue({
+        el: '#app',
+        data: {
+            counter: 0
+        },
+        methods: {
+            decrement() {
+                this.counter--;
+            }
+        }
+    });
+</script>
+</body>
+</html>

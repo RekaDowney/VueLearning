@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!--suppress HtmlUnknownTag -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>v-model 子父通信</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+<div id="app">
+    <p>{{counter}}</p>
+
+    <!-- v-model 子父通信实际上是一种语法糖 -->
+    <!--<component-model v-model.number="counter"></component-model>-->
+    <!-- v-model 语法糖实际上是通过监听 input 事件实现 -->
+    <component-model @input="handleCounterChange"></component-model>
+</div>
+<script type="text/javascript">
+    Vue.component('component-model', {
+        template: '<button @click="increment">+</button>',
+        data() {
+            return {
+                // counter: 1
+                counter: 0
+            }
+        },
+        methods: {
+            increment() {
+                this.counter++;
+                this.$emit('input', this.counter);
+            }
+        }
+    });
+
+    // 直接使用 v-model 绑定时不需要
+    /*
+        let vue = new Vue({
+            el: '#app',
+            data: {
+                counter: 0,
+            }
+        });
+    */
+
+    let vue = new Vue({
+        el: '#app',
+        data: {
+            counter: 0,
+        },
+        methods: {
+            handleCounterChange(counter) {
+                this.counter = counter;
+            }
+        }
+    });
+
+</script>
+</body>
+</html>

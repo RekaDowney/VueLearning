@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--suppress HtmlUnknownTag -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>slot</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+<div id="vueSlot">
+    <p>父级</p>
+    <div>
+        <p>{{message}}</p>
+    </div>
+    <hr/>
+
+    <p>子级</p>
+    <component-child v-if="showChildComponent">{{message}}</component-child>
+    <hr/>
+    <component-child>
+        <p>分发第一项内容</p>
+        <p>分发第二项内容：{{message}}</p>
+    </component-child>
+    <hr/>
+    <component-child></component-child>
+</div>
+<script type="text/javascript">
+
+    Vue.component('component-child', {
+        template: '<div><slot>如果父组件没有插入内容，我将默认出现</slot></div>'
+    });
+
+    let vue = new Vue({
+        el: '#vueSlot',
+        data: {
+            message: 'message from parent component',
+            showChildComponent: true
+        }
+    });
+</script>
+</body>
+</html>

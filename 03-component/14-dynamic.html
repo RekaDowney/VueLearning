@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>动态组件</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+<div id="vueDynamic">
+    <!-- VueJS 提供一个 component 标签来支持动态组件 -->
+    <!-- 将 currentComponent 变量绑定到 is 属性中，随后可以通过变量的变化进行组件的动态渲染 -->
+    <component :is="currentComponent">
+    </component>
+    <button type="button" @click="switchComponent('component-a')">切换到组件A</button>
+    <button type="button" @click="switchComponent('component-b')">切换到组件B</button>
+    <button type="button" @click="switchComponent('component-c')">切换到组件C</button>
+</div>
+<template>
+</template>
+<script type="text/javascript">
+    Vue.component('component-a', {
+        template: '<div>组件A</div>'
+    });
+    Vue.component('component-b', {
+        template: '<div>组件B</div>'
+    });
+    Vue.component('component-c', {
+        template: '<div>组件C</div>'
+    });
+
+    let vue = new Vue({
+        el: '#vueDynamic',
+        data: {
+            currentComponent: 'component-a',
+        },
+        methods: {
+            switchComponent(target) {
+                this.currentComponent = target;
+            }
+        }
+    })
+</script>
+</body>
+</html>

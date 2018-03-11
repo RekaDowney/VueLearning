@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!--suppress HtmlUnknownTag -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>基于 bus 总线实现上下级、同级组件通信</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+
+<div id="vueBus">
+    <p>父级</p>
+    <p>{{counter}}</p>
+    <!-- input 标签值与 counter 绑定，每次有新的输入则触发 modifyCounter 事件 -->
+    <input type="text" :value="counter" @input="modifyCounter"/>
+
+    <hr>
+
+    <p>子级</p>
+    <bus-component></bus-component>
+</div>
+
+<script type="text/javascript">
+    // 将空的 Vue 实例作为通信总线
+    let bus = new Vue();
+
+    Vue.component('bus-component', {
+        data() {
+            return {
+                counter: 0
+            }
+        },
+        template: '<div>' +
+        '<button type="button" @click="increment">+</button>' +
+        '<span>{{counter}}</span>' +
+        '<button type="button" @click="decrement">-</button>' +
+        '</div>',
+        methods: {
+            increment() {
+                this.counter++;
+                bus.$emit('updateCounter', this.counter);
+            },
+            decrement() {
+                this.counter--;
+                bus.$emit('updateCounter', this.counter);
+            }
+        },
+        // 组件挂载后监听 counterChange 事件
+        mounted() {
+            let _this = this;
+            bus.$on('counterChange', function (counter) {
+                _this.counter = counter;
+            });
+        }
+    });
+
+
+    let vue = new Vue({
+        el: '#vueBus',
+        data: {
+            counter: 0
+        },
+        methods: {
+            modifyCounter(event) {
+                this.counter = event.target.value;
+                bus.$emit('counterChange', this.counter);
+            }
+        },
+        mounted() {
+            let _this = this;
+            bus.$on('updateCounter', function (counter) {
+                _this.counter = counter;
+            });
+        }
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<!--suppress HtmlUnknownTag -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>组件开发实战：数字输入框</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+<!--
+    要求：
+        1、数字输入框只能够输入数字；
+        2、可以通过快捷按钮加减1；
+        3、允许设置初始值、最大值、最小值；
+        4、在数值发生变化时，触发一个自定义事件来通知父组件。
+
+    拓展：
+        1、允许设置自增、自建步进
+        2、输入框聚焦时可以通过 ↑ 或者 ↓ 自增指定步进
+-->
+
+<div id="app">
+    <input-number v-model="value" :min="0" :max="100" :step="5" @on-change="handleValueChange">
+    </input-number>
+</div>
+
+<script type="text/x-template" id="numberInput">
+    <div class="input-number">
+        <input class="inputNumber" type="text"
+               :value="value"
+               @change="handleChange"
+               @keydown.down="decrement"
+               @keydown.up="increment">
+        <button type="button" @click="decrement" :disabled="currentValue <= min">-</button>
+        <button type="button" @click="increment" :disabled="currentValue >= max">+</button>
+    </div>
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        Vue.component('input-number', {
+            props: {
+                value: {
+                    type: Number,
+                    default: 0
+                },
+                min: {
+                    type: Number,
+                    default: -Infinity
+                },
+                max: {
+                    type: Number,
+                    default: Infinity
+                },
+                step: {
+                    type: Number,
+                    default: 1
+                }
+            },
+            data() {
+                return {
+                    currentValue: this.value
+                }
+            },
+            template: '#numberInput',
+            // template: '    <div class="input-number">\n' +
+            // '        <input class="inputNumber" type="text" :value="value" @keydown.enter="handleChange">\n' +
+            // '        <button type="button" @click="decrement" :disabled="currentValue <= min">-</button>\n' +
+            // '        <button type="button" @click="increment" :disabled="currentValue >= max">+</button>\n' +
+            // '    </div>',
+            watch: {
+                currentValue(newVal, oldVal) {
+                    // 触发使用当前组件绑定的 v-model 数值
+                    this.$emit('input', newVal);
+                    // 触发自定义的 on-change 事件，可让父级组件自己处理数值变化
+                    // this.$emit('on-change', ...[newVal, oldVal]);
+                    this.$emit('on-change', newVal, oldVal);
+                },
+                // 父组件传递过来的 value 发生变化时
+                value(newVal, oldVal) {
+                    this.updateValue(newVal);
+                }
+            },
+            methods: {
+                updateValue(newVal) {
+                    if (newVal > this.max) {
+                        newVal = this.max
+                    }
+                    if (newVal < this.min) {
+                        newVal = this.min;
+                    }
+                    if (newVal !== this.currentValue) {
+                        this.currentValue = newVal;
+                    }
+                },
+                handleChange(event) {
+                    let val = event.target.value.trim();
+                    if (/[0-9]+/.test(val)) {
+                        val = Number(val);
+                        if (this.max >= val >= this.min) {
+                            this.currentValue = val;
+                        } else {
+                            event.target.value = this.currentValue;
+                        }
+                    }
+                },
+                increment() {
+                    if (this.currentValue < this.max) {
+                        let newVal = this.currentValue + this.step;
+                        this.currentValue = newVal < this.max ? newVal : this.max;
+                    }
+                },
+                decrement() {
+                    if (this.currentValue > this.min) {
+                        let newVal = this.currentValue - this.step;
+                        this.currentValue = newVal > this.min ? newVal : this.min;
+                    }
+                }
+            },
+            mounted() {
+                this.updateValue(this.value);
+            }
+        });
+
+        let vue = new Vue({
+            el: '#app',
+            data: {
+                value: 60
+            },
+            methods: {
+                handleValueChange(newVal, oldVal) {
+                    console.log('值发生变化：', oldVal, '-->', newVal);
+                }
+            }
+        });
+
+    });
+</script>
+</body>
+</html>
