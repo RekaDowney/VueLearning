@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!--suppress HtmlUnknownTag -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>初识组件的render函数</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+    <style type="text/css">
+        .red {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app01">
+    <component-child></component-child>
+</div>
+
+<hr>
+
+<div id="app02">
+    <component-child></component-child>
+</div>
+
+<script type="text/javascript">
+
+    let app01 = new Vue({
+        el: '#app01',
+        components: {
+            'component-child': {
+                template: '<div><p title="文本标题" :class="{red: red}" @click="handleClick">使用template实现组件</p></div>',
+                data() {
+                    return {
+                        red: true
+                    }
+                },
+                methods: {
+                    handleClick() {
+                        alert('app01 click ...');
+                    }
+                }
+            }
+        }
+    });
+
+    // 这里的目标是演示 render 函数，真实场合下这里使用 template 明显优于 render
+    let app02 = new Vue({
+        el: '#app02',
+        components: {
+            'component-child': {
+                render(createElement) {
+                    return createElement(
+                        // 第一个（必选）参数可以是标签字符串或者组件
+                        'div',
+                        // 第二个（可选）参数是数据对象，这里的数据对象可以给第三个参数使用
+                        {
+                            class: {
+                                red: this.red,
+                            },
+                            attrs: {
+                                title: '文本标题'
+                            },
+
+                        },
+                        // 第三个（可选）参数可以字符串，表示当前节点内容
+                        // 如果不是字符串，则必须是数组表示的子节点
+                        [
+                            createElement(
+                                'p',
+                                // 这里虽然没有定义数据对象，但是可以直接获取上层的数据对象
+                                {
+                                    on: {
+                                        click: this.handleClick
+                                    }
+                                },
+                                '使用render实现组件'
+                            )
+                        ]
+                    );
+                },
+                data() {
+                    return {
+                        red: true
+                    }
+                },
+                methods: {
+                    handleClick() {
+                        alert('app02 click ...');
+                    }
+                }
+            }
+        }
+    });
+
+</script>
+</body>
+</html>

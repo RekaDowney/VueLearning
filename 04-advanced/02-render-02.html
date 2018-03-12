@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!--suppress HtmlUnknownTag -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>render函数约束</title>
+    <script type="text/javascript" src="../resources/js/vue/vue.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../resources/js/layer/layer.js"></script>
+    <script type="text/javascript" src="../resources/js/custom/assert.js"></script>
+</head>
+<body>
+
+<div id="app">
+    <component-child></component-child>
+    <hr>
+    <duplicate-child></duplicate-child>
+</div>
+
+<script type="text/javascript">
+    let child = {
+        render(createElement) {
+            return createElement('p', '文本内容');
+        }
+    };
+    let vue = new Vue({
+        el: '#app',
+        components: {
+            'component-child': {
+                render(createElement) {
+                    let childNode = createElement(child);
+                    // 企图创建 <div><p>文本内容</p><p>文本内容</p></div>
+                    return createElement('div', [childNode, childNode]);
+                }
+            },
+            'duplicate-child': {
+                render(createElement) {
+                    return createElement('div',
+                        Array.apply(null, {length: 3}).map(function () {
+                            return createElement(child);
+                        })
+                    );
+                }
+            }
+        }
+    })
+</script>
+</body>
+</html>
